@@ -1,7 +1,6 @@
 (ns bingo.core-test
   (:require [clojure.test :refer :all]
-            [bingo.core :refer :all]
-            [org.httpkit.fake :refer :all]))
+            [bingo.core :refer :all]))
 
 (def image-metadata-response
   "{\"images\": [
@@ -35,7 +34,7 @@
 
 (deftest get-image-metadata-test
   (testing "Get Image Metadata"
-    (with-fake-http ["http://www.bing.com/HPImageArchive.aspx?&format=js&idx=0&mkt=en-US&n=1" image-metadata-response]
+    (with-redefs [http-get (fn [url] image-metadata-response)]
       (testing "Extract Image Filename"
         (is (= "MagneticIsland.jpeg" (:filename (get-image-metadata)))))
 

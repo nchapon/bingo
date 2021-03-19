@@ -25,6 +25,7 @@
 (defn download-image
   "Download image from url in output-dir"
   [url filename out-dir]
+  {:pre [url]}
   (let [{:keys [status headers body error] :as resp} @(http/get url {:as :stream})]
     (if error
       (println "Failed, error is " error)
@@ -39,19 +40,29 @@
     (assoc metadata :url (str bing-url url)
            :filename (str (nth (re-find #"(.*OHR\.)(.*)(_EN-US.*)" url) 2) ".jpeg"))))
 
+
+(defn http-get
+  "Get image metadata"
+  [url]
+  (let [{:keys [status headers body error] :as resp} @(http/get url)]
+    (cond error (println "Request failed " error)
+          (not (= status 200)) (println "Request failed with status " status)
+          :else body)))
+
+
 (defn get-image-metadata
   "Get Image"
   [& args]
-  (let [{:keys [status headers body error] :as resp} @(http/get "http://www.bing.com/HPImageArchive.aspx?&format=js&idx=0&mkt=en-US&n=1")]
-    (if error
-      (println "Failed, error is " error)
-      (get-metadata (json/read-str body)))))
+  (let [content (http-get "http://www.bing.com/HPImageArchive.aspx?&format=js&idx=0&mkt=en-US&n=1")]
+    (if content
+      (get-metadata (json/read-str content)))))
 
 
 (defn -main
   "Download Bing's image wallpaper."
   [& args]
-  (let [{:keys [output-dir]} (:options (parse-opts args cli-options))
+  (let [{:keys [output-dir]}    (:options (parse-opts args cli-options))
         {:keys [url filename] } (get-image-metadata)]
-    (println (format "Downloading %s to %s directory" filename output-dir))
-    (download-image url filename output-dir)))
+    (when url
+      (println (format "Downloading %s to %s directory" filename output-dir))
+      (download-image url filename output-dir))))

@@ -6,11 +6,7 @@
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [http-kit/http-kit "2.5.3"]
                  [org.clojure/data.json "1.1.0"]
-                 [org.clojure/tools.cli "1.0.206"]
-                 ;; for test only
-                 ;; [http-kit.fake "0.2.1"]
-                 ]
+                 [org.clojure/tools.cli "1.0.206"]]
   :main ^:skip-aot bingo.core
   ;; :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}
-             :test {:dependencies [[http-kit.fake "0.2.1"]]}})
+  :profiles {:uberjar {:aot :all}})
