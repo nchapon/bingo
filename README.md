@@ -1,6 +1,6 @@
 # bingo
 
-A little program wriiten in clojure that can get Bing Walpaper
+Get the daily Bing Image
 
 ## Installation
 
