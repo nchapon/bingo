@@ -2,7 +2,8 @@
   (:require [org.httpkit.client :as http]
             [clojure.data.json :as json]
             [clojure.java.io :as io]
-            [clojure.tools.cli :refer [parse-opts]])
+            [clojure.tools.cli :refer [parse-opts]]
+            [clojure.string :as str])
   (:gen-class))
 
 (def bing-url "http://www.bing.com")
@@ -11,9 +12,9 @@
 (def cli-options
   [["-o" "--output-dir DIRECTORY" "Output Directory"
     :default "./output"]
-   ["-n" "--nb-images IMAGES" "Numbers of images"
-    :default 1
-    ]])
+   ["-n" "--nb-images IMAGES" "Numbers of images (max 7)"
+    :default 1]
+   ["-h" "--help"]])
 
 
 (defn create-file
@@ -62,9 +63,34 @@
      (parse-json)))
 
 
+(defn usage [options-summary]
+  (->> ["Bingo : a CLI to get Bing's daily walpapers."
+        ""
+        "Usage: bingo [options]"
+        ""
+        "Options:"
+        options-summary
+        ""
+        "Examples of usage :"
+        "  bingo                Download bing walpaper of the day in ./output directory"
+        "  bingo -n 7 -o /tmp   Downlaod last 7 bing walpapers in /tmp directory"
+        ""]
+       (str/join \newline)))
+
+(defn- exit [msg]
+  (println msg)
+  (System/exit 0))
+
+(defn- evaluate-args
+  [args]
+  (let  [{:keys [options summary]} (parse-opts args cli-options)]
+    (cond
+      (:help options) (exit (usage summary))
+      :else options)))
+
 (defn -main
   "Download Bing's image wallpaper."
   [& args]
-  (let [{:keys [output-dir nb-images]} (:options (parse-opts args cli-options))]
+  (let [{:keys [output-dir nb-images]} (evaluate-args args)]
     (run! println (map #(download-image output-dir %)
                (get-images nb-images)))))
