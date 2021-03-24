@@ -1,20 +1,37 @@
 # bingo
 
-Get the daily Bing Image
+Experimental CLI written in Clojure to get bing's daily walpaper.
 
-## Installation
+## Installation fron sources
 
-Download from http://example.com/FIXME.
+### Standalone JAR ###
+
+
+``` shell
+lein do clean, uberjar
+```
+
+
+### Native build ###
+
+Compilation fron source code
+
+``` shell
+lein do clean, uberjar, native
+```
 
 ## Usage
 
-FIXME: explanation
 
     $ java -jar bingo-0.1.0-standalone.jar [args]
 
 ## Options
 
-FIXME: listing of options this app accepts.
+-h --help
+
+-n --nb-images <number>
+
+-o --out
 
 ## Examples
 
