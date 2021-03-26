@@ -81,6 +81,7 @@ jobs:
           command: |
             scripts/compile
             VERSION=$(cat resources/VERSION)
+            mkdir -p /tmp/release
             cp target/bingo-$VERSION-standalone.jar /tmp/release/bingo-$VERSION-standalone.jar
             cp target/bingo  /tmp/release/bingo
           no_output_timeout: 30m
