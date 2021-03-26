@@ -53,6 +53,7 @@ jobs:
     environment:
       LEIN_ROOT: "true"
       GRAALVM_HOME: /home/circleci/graalvm-ce-java11-21.0.0.2
+      VERSION: "0.1.0-SNAPSHOT"
     resource_class: large
     steps:
       - checkout
@@ -80,11 +81,9 @@ jobs:
           name: Build binary
           command: |
             scripts/compile
+            cp target/bingo-$VERSION-standalone.jar /tmp/release/bingo-$VERSION-standalone.jar
+            cp target/bingo  /tmp/release/bingo
           no_output_timeout: 30m
-      - persist_to_workspace:
-          root: /tmp
-          paths:
-            - release
       - save_cache:
           paths:
             - ~/.m2
