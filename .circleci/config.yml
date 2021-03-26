@@ -45,7 +45,57 @@ jobs:
       # run uberjar
       - run: lein uberjar
 
+
+  linux:
+    docker:
+      - image: circleci/clojure:lein-2.9.1
+    working_directory: ~/repo
+    environment:
+      LEIN_ROOT: "true"
+      GRAALVM_HOME: /home/circleci/graalvm-ce-java11-21.0.0.2
+    resource_class: large
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - linux-{{ checksum "project.clj" }}-{{ checksum ".circleci/config.yml" }}
+      - run:
+          name: Install lsof
+          command: |
+            sudo apt-get install lsof
+      - run:
+          name: Install native dev tools
+          command: |
+            sudo apt-get update
+            sudo apt-get -y install gcc g++ zlib1g-dev
+      - run:
+          name: Download GraalVM
+          command: |
+            cd ~
+            if ! [ -d graalvm-ce-java11-21.0.0.2 ]; then
+              curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.0.0.2/graalvm-ce-java11-linux-amd64-21.0.0.2.tar.gz
+              tar xzf graalvm-ce-java11-linux-amd64-21.0.0.2.tar.gz
+            fi
+      - run:
+          name: Build binary
+          command: |
+            scripts/compile
+          no_output_timeout: 30m
+      - persist_to_workspace:
+          root: /tmp
+          paths:
+            - release
+      - save_cache:
+          paths:
+            - ~/.m2
+            - ~/graalvm-ce-java11-21.0.0.2
+          key: linux-{{ checksum "project.clj" }}-{{ checksum ".circleci/config.yml" }}
+      - store_artifacts:
+          path: /tmp/release
+          destination: release
+
 workflows:
   build:
     jobs:
       - build
+      - linux

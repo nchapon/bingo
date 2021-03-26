@@ -8,7 +8,6 @@
                  [org.clojure/data.json "1.1.0"]
                  [org.clojure/tools.cli "1.0.206"]]
 
-  :uberjar-name "bingo.jar"
 
   :main bingo.core
   ;; :target-path "target/%s"
@@ -24,7 +23,7 @@
     "--initialize-at-build-time"
     "--initialize-at-run-time=org.httpkit.client.ClientSslEngineFactory\\$SSLHolder"
     "--enable-url-protocols=http,https"
-    "-jar" "./target/${:uberjar-name:-${:name}-${:version}-standalone.jar}"
+    "-jar" "./target/${:name}-${:version}-standalone.jar"
     "-H:Name=./target/${:name}"]
 
    "run-native" ["shell" "./target/${:name}"]}
