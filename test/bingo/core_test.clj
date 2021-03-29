@@ -37,9 +37,9 @@
   (testing "Get Images"
     (with-redefs [http-get (fn [url] image-metadata-response)]
       (testing "Only one images"
-        (is (= 1 (count (get-images 1)))))
+        (is (= 1 (count (get-images "fr-FR" 1)))))
 
       (testing "Image contains an URL and FileName"
         (is (= {:url "http://www.bing.com/th?id=OHR.MagneticIsland_FR-FR9412695841_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp"
                 :filename "MagneticIsland.jpeg"}
-             (first (get-images 1))))))))
+             (first (get-images "fr-FR" 1))))))))
