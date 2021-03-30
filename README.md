@@ -1,5 +1,7 @@
 # bingo
 
+[![CircleCI](https://circleci.com/gh/nchapon/bingo.svg?style=shield)](https://circleci.com/gh/nchapon/bingo)
+
 Experimental CLI written in Clojure to get bing's daily walpaper.
 
 ## Installation fron sources
@@ -31,7 +33,10 @@ lein do clean, uberjar, native
 
 -n --nb-images <number>
 
--o --out
+-o --output-dir
+
+-m --mkt
+
 
 ## Examples
 
