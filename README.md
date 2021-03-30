@@ -4,9 +4,11 @@
 
 Experimental CLI written in Clojure to get bing's daily walpaper.
 
-## Installation fron sources
+## Installation
 
-### Standalone JAR ###
+TODO
+
+### Installation from sources ###
 
 
 ``` shell
@@ -38,17 +40,6 @@ lein do clean, uberjar, native
 -m --mkt
 
 
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
 
 ## License
 
