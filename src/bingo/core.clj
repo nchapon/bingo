@@ -30,19 +30,15 @@
     :default "."]
    ["-n" "--nb-images NB IMAGES" "Numbers of images (max 7)"
     :default 1]
-   ["-m" "--mkt MARKET CODE" "Market code ex : fr-FR, en-US or de-DE"
+   [nil "--mkt MARKET CODE" "Market code ex : fr-FR, en-US or de-DE"
     :default mkt-default
     :validate [#(validate-mkt %) #(str % " is not a valid market code")]]
    ["-h" "--help"]])
 
 
-(defn- exit [msg]
+(defn- exit [status msg]
   (println msg)
-  (System/exit 0))
-
-(defn- exit-on-error [msg]
-  (println msg)
-  (System/exit 1))
+  (System/exit status))
 
 
 (defn create-file
@@ -80,7 +76,7 @@
   [url]
   (let [{:keys [status headers body error] :as resp} @(http/get url)]
     (cond error (println "Request failed " error)
-          (not (= status 200)) (exit-on-error (format "Request %s failed with status %s" url status))
+          (not (= status 200)) (exit (format "Request %s failed with status %s" url status) 1)
           :else (json/read-str body))))
 
 (defn- get-images-url
@@ -125,13 +121,15 @@
   [args]
   (let  [{:keys [options summary errors]} (cli/parse-opts args cli-options)]
     (cond
-      (:help options) (exit (usage summary))
-      errors (exit-on-error (error-msg errors))
+      (:help options) {:exit-message (usage summary) :ok? true}
+      errors {:exit-message (error-msg errors)}
       :else options)))
 
 (defn -main
   "Download Bing's image wallpaper."
   [& args]
-  (let [{:keys [output-dir mkt nb-images]} (evaluate-args args)]
-    (run! println (map #(download-image output-dir %)
-                       (get-images mkt nb-images)))))
+  (let [{:keys [output-dir mkt nb-images exit-message ok?]} (evaluate-args args)]
+    (if exit-message
+        (exit (if ok? 0 1) exit-message)
+        (run! println (map #(download-image output-dir %)
+                       (get-images mkt nb-images))))))
