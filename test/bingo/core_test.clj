@@ -1,10 +1,12 @@
 (ns bingo.core-test
   (:require [clojure.test :refer :all]
+            [bingo.http :as http]
             [clojure.data.json :as json]
             [bingo.core :refer :all]))
 
-(def image-metadata-response (json/read-str
-  "{\"images\": [
+(def image-metadata-response
+  {:status 200
+   :body   "{\"images\": [
     {
       \"startdate\": \"20210319\",
       \"fullstartdate\": \"202103190700\",
@@ -30,12 +32,11 @@
     \"walle\": \"Cette image n’est pas disponible pour téléchargement en tant que papier peint.\",
     \"walls\": \"Téléchargez cette image. L’utilisation de cette image est réservée à des fins de papier peint uniquement.\"
   }
-}"))
-
+}"})
 
 (deftest get-images-test
   (testing "Get Images"
-    (with-redefs [http-get (fn [url] image-metadata-response)]
+    (with-redefs [http/http-get (fn [url] image-metadata-response)]
       (testing "Only one images"
         (is (= 1 (count (get-images "fr-FR" 1)))))
 

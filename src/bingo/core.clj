@@ -1,5 +1,5 @@
 (ns bingo.core
-  (:require [org.httpkit.client :as http]
+  (:require [bingo.http :as http]
             [clojure.data.json :as json]
             [clojure.java.io :as io]
             [clojure.tools.cli :as cli]
@@ -41,8 +41,8 @@
   (System/exit status))
 
 
-(defn create-file
-  "Create Image File"
+(defn save-file
+  "Save Image File"
   [content filename output-dir]
   (let [output-file (str output-dir "/" filename)]
     (io/make-parents output-file)
@@ -53,11 +53,11 @@
 (defn download-image
   "Download image from url in output-dir"
   [out-dir {:keys [url filename]}]
-  (let [{:keys [status headers body error] :as resp} @(http/get url {:as :stream})]
-    (if error
-      (println (format "Failed, error is " error))
-      (create-file body filename out-dir))))
-
+  (-> (http/request-to url)
+      (assoc :options {:as :stream})
+      (http/http-get)
+      :body
+      (save-file filename out-dir)))
 
 (defn create-image
   "Create Image"
@@ -65,34 +65,19 @@
   (assoc {} :url (str bing-host url)
             :filename (str (nth (re-find #"(.*OHR\.)(.*)(_.*)" urlbase) 2) ".jpeg")))
 
-(defn parse-json
+(defn json->images
   "Parse JSON"
   [json]
   (map #(create-image (get-in % ["url"]) (get-in % ["urlbase"]))
        (get-in  json ["images"])))
 
-(defn http-get
-  "Get image metadata as JSON"
-  [url]
-  (let [{:keys [status headers body error] :as resp} @(http/get url)]
-    (cond error (println "Request failed " error)
-          (not (= status 200)) (exit (format "Request %s failed with status %s" url status) 1)
-          :else (json/read-str body))))
-
-(defn- get-images-url
-  [nb-images mkt]
-  (format "http://www.bing.com/HPImageArchive.aspx?&format=js&idx=0&mkt=%s&n=%s"
-          mkt
-          nb-images))
-
 (defn get-images
   "Returns availables images"
   [mkt nb-images]
-  (some->> mkt
-     (get-images-url nb-images)
-     (http-get)
-     (parse-json)))
-
+  (-> (http/request-to bing-host "/HPImageArchive.aspx?&format=js&idx=0&mkt=" mkt "&n=" nb-images)
+      (http/http-get)
+      (http/response)
+      (json->images)))
 
 (defn usage [options-summary]
   (->> ["Bingo : a CLI to get Bing's daily walpapers."

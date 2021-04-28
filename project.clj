@@ -26,6 +26,4 @@
     "-jar" "./target/${:name}-${:version}-standalone.jar"
     "-H:Name=./target/${:name}"]
 
-   "run-native" ["shell" "./target/${:name}"]}
-
-  )
+   "run-native" ["shell" "./target/${:name}"]})
