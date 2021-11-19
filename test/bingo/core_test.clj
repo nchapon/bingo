@@ -1,8 +1,8 @@
 (ns bingo.core-test
-  (:require [clojure.test :refer :all]
-            [bingo.http :as http]
-            [clojure.data.json :as json]
-            [bingo.core :refer :all]))
+  (:require
+   [bingo.core :refer :all]
+   [bingo.http :as http]
+   [clojure.test :refer :all]))
 
 (def image-metadata-response
   {:status 200

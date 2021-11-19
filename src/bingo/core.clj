@@ -1,10 +1,11 @@
 (ns bingo.core
-  (:require [bingo.http :as http]
-            [clojure.data.json :as json]
-            [clojure.java.io :as io]
-            [clojure.tools.cli :as cli]
-            [clojure.string :as string])
-  (:import (java.util Locale))
+  (:require
+   [bingo.http :as http]
+   [clojure.java.io :as io]
+   [clojure.string :as string]
+   [clojure.tools.cli :as cli])
+  (:import
+   (java.util Locale))
   (:gen-class))
 
 

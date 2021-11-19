@@ -8,7 +8,6 @@
                  [org.clojure/data.json "1.1.0"]
                  [org.clojure/tools.cli "1.0.206"]]
 
-
   :main bingo.core
   ;; :target-path "target/%s"
   :profiles {:uberjar {:aot :all}
