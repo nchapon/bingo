@@ -1,5 +1,6 @@
 (ns bingo.core
   (:require
+   [bingo.bing-api :as bing]
    [bingo.http :as http]
    [clojure.java.io :as io]
    [clojure.string :as string]
@@ -8,12 +9,11 @@
    (java.util Locale))
   (:gen-class))
 
-
 (def mkt-codes (concat ["ar-SA" "da-DK" "de-AT" "de-CH" "de-DE" "en-AU" "en-CA" "en-GB"]
-        ["en-ID" "en-IN" "en-MY" "en-NZ" "en-PH" "en-US" "en-ZA" "es-AR"]
-        ["es-CL" "es-ES" "es-MX" "es-US" "fi-FI" "fr-BE" "fr-CA" "fr-CH"]
-        ["fr-FR" "it-IT" "ja-JP" "ko-KR" "nl-BE" "nl-NL" "pl-PL" "pt-PT"]
-        ["pt-br" "ru-RU" "sv-SE" "tr-TR" "zh-CN" "zh-HK" "zh-TW"]))
+                       ["en-ID" "en-IN" "en-MY" "en-NZ" "en-PH" "en-US" "en-ZA" "es-AR"]
+                       ["es-CL" "es-ES" "es-MX" "es-US" "fi-FI" "fr-BE" "fr-CA" "fr-CH"]
+                       ["fr-FR" "it-IT" "ja-JP" "ko-KR" "nl-BE" "nl-NL" "pl-PL" "pt-PT"]
+                       ["pt-br" "ru-RU" "sv-SE" "tr-TR" "zh-CN" "zh-HK" "zh-TW"]))
 
 (def bing-host "http://www.bing.com")
 
@@ -36,11 +36,9 @@
     :validate [#(validate-mkt %) #(str % " is not a valid market code")]]
    ["-h" "--help"]])
 
-
 (defn- exit [status msg]
   (println msg)
   (System/exit status))
-
 
 (defn save-file
   "Save Image File"
@@ -50,6 +48,14 @@
     (io/copy content (java.io.File. output-file))
     output-file))
 
+(defn create-img
+  "Save Image File"
+  [content filename]
+  (try
+    (io/make-parents filename)
+    (io/copy content (java.io.File. filename))
+    filename
+    (catch Exception e)))
 
 (defn download-image
   "Download image from url in output-dir"
@@ -60,11 +66,14 @@
       :body
       (save-file filename out-dir)))
 
+(defn url->filename [urlbase]
+  (str (nth (re-find #"(.*OHR\.)(.*)(_.*)" urlbase) 2) ".jpeg"))
+
 (defn create-image
   "Create Image"
   [url urlbase]
   (assoc {} :url (str bing-host url)
-            :filename (str (nth (re-find #"(.*OHR\.)(.*)(_.*)" urlbase) 2) ".jpeg")))
+         :filename (url->filename urlbase)))
 
 (defn json->images
   "Parse JSON"
@@ -98,7 +107,6 @@
         ""]
        (string/join \newline)))
 
-
 (defn error-msg [errors]
   (str "The following errors occurred while parsing your command:\n\n"
        (string/join \newline errors)))
@@ -111,11 +119,19 @@
       errors {:exit-message (error-msg errors)}
       :else options)))
 
+(defn download-images [market n output-dir]
+  "Downlaad Images"
+  (map #(create-img
+         (bing/download-image (:url %))
+         (str output-dir "/" (url->filename (:urlbase %))))
+       (bing/fetch-images market n)))
+
 (defn -main
   "Download Bing's image wallpaper."
   [& args]
   (let [{:keys [output-dir mkt nb-images exit-message ok?]} (evaluate-args args)]
     (if exit-message
-        (exit (if ok? 0 1) exit-message)
-        (run! println (map #(download-image output-dir %)
-                       (get-images mkt nb-images))))))
+      (exit (if ok? 0 1) exit-message)
+      (run! println (download-images mkt nb-images output-dir)))))
+
+
