@@ -17,12 +17,15 @@
    ["shell"
     "native-image"
     "--report-unsupported-elements-at-runtime"
-    "--no-server"
-    "--allow-incomplete-classpath"
+    "--no-fallback"
+    "--verbose"
     "--initialize-at-build-time"
+    "--native-image-info"
     "--initialize-at-run-time=org.httpkit.client.ClientSslEngineFactory\\$SSLHolder"
     "--enable-url-protocols=http,https"
     "-jar" "./target/${:name}-${:version}-standalone.jar"
+    "-H:+ReportExceptionStackTraces"
+    "-H:ReflectionConfigurationFiles=./resources/META-INF/native-image/logging.json"
     "-H:Name=./target/${:name}"]
 
    "run-native" ["shell" "./target/${:name}"]})
