@@ -8,7 +8,7 @@ Experimental CLI written in Clojure to get bing's daily walpaper.
 
 TODO
 
-### Installation from sources ###
+### Java executable ###
 
 
 ``` shell
@@ -16,9 +16,9 @@ lein do clean, uberjar
 ```
 
 
-### Native build ###
+### Native Executable ###
 
-Compilation fron source code
+Native compilation with GraalVM
 
 ``` shell
 lein do clean, uberjar, native
@@ -43,7 +43,7 @@ lein do clean, uberjar, native
 
 ## License
 
-Copyright © 2021 FIXME
+Copyright © 2022 Nicolas CHAPON
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at
