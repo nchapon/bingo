@@ -97,5 +97,11 @@ jobs:
 workflows:
   build:
     jobs:
-      - build
-      - linux
+      - build:
+          filters:
+            branches:
+              only: lein-build
+      - linux:
+          filters:
+            branches:
+              only: lein-build
