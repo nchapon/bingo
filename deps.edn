@@ -1,0 +1,21 @@
+{:paths ["src" "resources"]
+ :deps {org.clojure/clojure {:mvn/version "1.10.3"}
+        http-kit/http-kit {:mvn/version "2.5.3"}
+        org.clojure/data.json {:mvn/version "1.1.0"}
+        org.clojure/tools.cli {:mvn/version "1.0.206"}}
+ :aliases
+ {:run-m {:main-opts ["-m" "bingo.core"]}
+  :run-x {:ns-default bingo.core
+          :exec-fn download-images
+          :exec-args ["fr-FR" 1 "/tmp"]}
+  :build {:deps {io.github.seancorfield/build-clj
+                 {:git/tag "v0.6.3" :git/sha "9b8e09b"
+                  ;; since we're building an app uberjar, we do not
+                  ;; need deps-deploy for clojars.org deployment:
+                  :deps/root "slim"}
+                 io.github.clojure/tools.build {:git/tag "v0.7.5" :git/sha "34727f7"}}
+          :ns-default build}
+  :test {:extra-paths ["test"]
+         :extra-deps {org.clojure/test.check {:mvn/version "1.1.1"}
+                      io.github.cognitect-labs/test-runner
+                      {:git/tag "v0.5.0" :git/sha "48c3c67"}}}}}
