@@ -7,7 +7,7 @@
  {:run-m {:main-opts ["-m" "bingo.core"]}
   :run-x {:ns-default bingo.core
           :exec-fn download-images
-          :exec-args ["fr-FR" 1 "/tmp"]}
+          :exec-args {:mkt "fr-FR" :nb-images 1 :output-dir "/tmp"}}
   :build {:deps {io.github.seancorfield/build-clj
                  {:git/tag "v0.6.3" :git/sha "9b8e09b"
                   ;; since we're building an app uberjar, we do not

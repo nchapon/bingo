@@ -86,11 +86,11 @@
 
 (defn download-images
   "Downlaad Images"
-  [market n output-dir]
+  [params]
   (map #(create-image
          (bing/download-image (:url %))
-         (str output-dir "/" (url->filename (:urlbase %))))
-       (bing/fetch-images market n)))
+         (str (:output-dir params) "/" (url->filename (:urlbase %))))
+       (bing/fetch-images (:mkt params) (:nb-images params))))
 
 (defn -main
   "Download Bing's image wallpaper."
@@ -98,6 +98,8 @@
   (let [{:keys [output-dir mkt nb-images exit-message ok?]} (evaluate-args args)]
     (if exit-message
       (exit (if ok? 0 1) exit-message)
-      (run! println (download-images mkt nb-images output-dir)))))
+      (run! println (download-images {:mkt mkt
+                                      :nb-images nb-images
+                                      :output-dir output-dir})))))
 
 

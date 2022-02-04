@@ -31,4 +31,6 @@
     (with-redefs [bing-api/fetch-images (fn [market nb-images] fetch-images-response)
                   bing-api/download-image (fn [_] (io/input-stream (java.io.File. "resources/sample.jpg")))]
       (is (= '("/tmp/ImageSample.jpeg")
-             (sut/download-images "fr-FR" 1 "/tmp"))))))
+             (sut/download-images {:mkt "fr-FR"
+                                   :nb-images 1
+                                   :output-dir "/tmp"}))))))
