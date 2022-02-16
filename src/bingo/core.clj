@@ -30,7 +30,7 @@
     :default "."]
    ["-n" "--nb-images NB IMAGES" "Numbers of images (max 7)"
     :default 1]
-   [nil "--mkt MARKET CODE" "Market code ex : fr-FR, en-US or de-DE"
+   ["-m" "--mkt MARKET CODE" "Market code ex : fr-FR, en-US or de-DE"
     :default mkt-default
     :validate [#(validate-mkt %) #(str % " is not a valid market code")]]
    ["-h" "--help"]])
