@@ -28,6 +28,7 @@ jobs:
       run: clojure -T:build ci  
 
     - name: PreRelease
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v1 
       with:
+        prerelease: true
         files: target/bingo-0.1.0-SNAPSHOT.jar
