@@ -1,19 +1,28 @@
-name: Clojure CI
+name: Test and Package 
 
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
+  
 jobs:
   build:
 
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Install dependencies
-      run: lein deps
-    - name: Run tests
-      run: lein test
+    - name: Checkout
+      uses: actions/checkout@v2
+        
+    - name: Prepare Java
+      uses: actions/setup-java@v2
+      with:
+        distribution: "temurin"
+        java-version: "11"
+
+    - name: Install clojure tools
+      uses: DeLaGuardo/setup-clojure@3.7
+      with:
+        cli: 1.10.3.1075 # Clojure CLI based on tools.deps
+
+    - name: Test and Package
+      run: clojure -T:build ci  

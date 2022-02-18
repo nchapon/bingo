@@ -102,4 +102,5 @@
                                       :nb-images nb-images
                                       :output-dir output-dir})))))
 
-
+(comment
+  (download-images {:mkt "fr-FR" :nb-images 7 :output-dir "/tmp"}))
