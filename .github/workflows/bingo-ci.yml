@@ -31,4 +31,5 @@ jobs:
       uses: softprops/action-gh-release@v1 
       with:
         prerelease: true
+        tag_name: latest
         files: target/bingo-0.1.0-SNAPSHOT.jar
