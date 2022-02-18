@@ -26,3 +26,8 @@ jobs:
 
     - name: Test and Package
       run: clojure -T:build ci  
+
+    - name: PreRelease
+      uses: softprops/action-gh-release@v1
+      with:
+        files: target/bingo-0.1.0-SNAPSHOT.jar
