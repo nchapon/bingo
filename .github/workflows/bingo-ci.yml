@@ -88,7 +88,7 @@ jobs:
         if: ${{ matrix.os == 'ubuntu-latest' }}
         shell: bash
         run: |
-          ./scrtipts/build-native.sh
+          ./scripts/build-native.sh
           mv target/bingo target/bingo-native-linux
 
       - name: Build OSX
