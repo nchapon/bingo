@@ -9,5 +9,5 @@ native-image --report-unsupported-elements-at-runtime ^
     --enable-url-protocols=http,https ^
     -jar ../target/bingo-0.1.0-SNAPSHOT.jar ^
     -H:+ReportExceptionStackTraces ^
-    -H:ReflectionConfigurationFiles=../resources/META-INF/native-image/logging.json ^ 
-    -H:Name=./target/bingo
+    -H:ReflectionConfigurationFiles=../resources/META-INF/native-image/logging.json ^
+    -H:Name=../target/bingo

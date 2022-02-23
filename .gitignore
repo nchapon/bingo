@@ -19,3 +19,5 @@ pom.xml.asc
 /reports/
 /META-INF/
 /.cpcache/
+/scripts/.DS_Store
+/scripts/reports/
