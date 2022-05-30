@@ -4,10 +4,7 @@
         org.clojure/data.json {:mvn/version "1.1.0"}
         org.clojure/tools.cli {:mvn/version "1.0.206"}}
  :aliases
- {:run-m {:main-opts ["-m" "bingo.core"]}
-  :run-x {:ns-default bingo.core
-          :exec-fn download-images
-          :exec-args {:mkt "fr-FR" :nb-images 1 :output-dir "/tmp"}}
+ {:run   {:main-opts ["-m" "bingo.core"]}
   :build {:deps {io.github.seancorfield/build-clj
                  {:git/tag "v0.6.7" :git/sha "22c2d09"
                   ;; since we're building an app uberjar, we do not

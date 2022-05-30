@@ -8,7 +8,7 @@
    (java.util Locale))
   (:gen-class))
 
-(set! *warn-on-reflection* true)
+;;(set! *warn-on-reflection* true)       
 
 (def mkt-codes (concat ["ar-SA" "da-DK" "de-AT" "de-CH" "de-DE" "en-AU" "en-CA" "en-GB"]
                        ["en-ID" "en-IN" "en-MY" "en-NZ" "en-PH" "en-US" "en-ZA" "es-AR"]
