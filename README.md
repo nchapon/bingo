@@ -49,7 +49,7 @@ Run the project's tests from the task **test** in `build.clj`
 
     $ clojure -T:build test
 
-### Continuous Intgeration ###
+### Continuous Integration ###
 
 Run the project's CI pipeline and build an uberjar from the task **ci** in `build.clj`:
 
