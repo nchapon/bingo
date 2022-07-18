@@ -33,6 +33,7 @@
    ["-m" "--mkt MARKET CODE" "Market code ex : fr-FR, en-US or de-DE"
     :default mkt-default
     :validate [#(validate-mkt %) #(str % " is not a valid market code")]]
+   ["-v" "--version" "Print bingo version number"]
    ["-h" "--help"]])
 
 (defn- exit [status msg]
@@ -76,11 +77,15 @@
   (str "The following errors occurred while parsing your command:\n\n"
        (string/join \newline errors)))
 
+(defn- print-version []
+  "Bingo version 1.0\n")
+
 (defn- evaluate-args
   [args]
   (let  [{:keys [options summary errors]} (cli/parse-opts args cli-options)]
     (cond
       (:help options) {:exit-message (usage summary) :ok? true}
+      (:version options) {:exit-message (print-version) :ok? true}
       errors {:exit-message (error-msg errors)}
       :else options)))
 
@@ -103,4 +108,5 @@
                                       :output-dir output-dir})))))
 
 (comment
-  (download-images {:mkt "fr-FR" :nb-images 7 :output-dir "/tmp"}))
+  (download-images {:mkt "fr-FR" :nb-images 7 :output-dir "/tmp"})
+  (evaluate-args ["--version"]))
