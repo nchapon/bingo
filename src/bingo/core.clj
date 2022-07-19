@@ -80,7 +80,7 @@
 (defn- print-version []
   "Bingo version 1.0\n")
 
-(defn- evaluate-args
+(defn evaluate-args
   [args]
   (let  [{:keys [options summary errors]} (cli/parse-opts args cli-options)]
     (cond

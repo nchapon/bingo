@@ -3,6 +3,7 @@
    [bingo.bing-api :as bing-api]
    [bingo.core :as sut]
    [clojure.java.io :as io]
+   [clojure.string :as string]
    [clojure.test :refer [deftest is testing]]))
 
 (def fetch-images-response
@@ -34,3 +35,6 @@
              (sut/download-images {:mkt "fr-FR"
                                    :nb-images 1
                                    :output-dir "/tmp"}))))))
+
+(deftest print-version
+  (is (string/starts-with? (:exit-message (sut/evaluate-args ["--version"])) "Bingo version")))
