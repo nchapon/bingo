@@ -1,7 +1,7 @@
 (ns bingo.core-test
   (:require
    [bingo.bing-api :as bing-api]
-   [bingo.core :as sut]
+   [bingo.core :as SUT]
    [clojure.java.io :as io]
    [clojure.string :as string]
    [clojure.test :refer [deftest is testing]]))
@@ -32,9 +32,9 @@
     (with-redefs [bing-api/fetch-images (fn [market nb-images] fetch-images-response)
                   bing-api/download-image (fn [_] (io/input-stream (java.io.File. "resources/sample.jpg")))]
       (is (= '("/tmp/ImageSample.jpeg")
-             (sut/download-images {:mkt "fr-FR"
+             (SUT/download-images {:mkt "fr-FR"
                                    :nb-images 1
                                    :output-dir "/tmp"}))))))
 
 (deftest print-version
-  (is (string/starts-with? (:exit-message (sut/evaluate-args ["--version"])) "Bingo version")))
+  (is (string/starts-with? (:exit-message (SUT/evaluate-args ["--version"])) "Bingo version")))
